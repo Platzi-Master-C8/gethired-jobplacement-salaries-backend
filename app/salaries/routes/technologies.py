@@ -11,14 +11,10 @@ router: APIRouter = APIRouter()
 @router.get(
     "/api/technologies",
     summary="Get technologies availables.",
-    response_model=Technology,
 )
-def salaries():
+def technologies():
     """
-    Salaries
-    This is the main endpoint of the project.
-
-    :argument salary_data: Salary
-    :return: SalaryOut
+    Technologies
+    Get technologies available in our data set.
     """
-    return SalaryOut(average=4000, top=3000, bottom=5000)
+    return [dict(name="python"), dict("javascript")]
