@@ -11,6 +11,7 @@ router: APIRouter = APIRouter()
 @router.get(
     "/api/technologies",
     summary="Get technologies availables.",
+    tags=["Salaries"]
 )
 def technologies():
     """
