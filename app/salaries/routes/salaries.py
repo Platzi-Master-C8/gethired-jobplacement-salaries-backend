@@ -13,6 +13,7 @@ router: APIRouter = APIRouter()
     "/api/salaries",
     summary="Get salaries information.",
     response_model=SalaryOut,
+    tags=["Salaries"]
 )
 def salaries(salary_data: Salary = Body(...)):
     """

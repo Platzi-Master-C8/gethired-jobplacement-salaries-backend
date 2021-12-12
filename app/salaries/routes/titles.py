@@ -11,6 +11,7 @@ router: APIRouter = APIRouter()
 @router.get(
     "/api/titles",
     summary="Get titles availables.",
+    tags=["Salaries"]
 )
 def titles():
     """
