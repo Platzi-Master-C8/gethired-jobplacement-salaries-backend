@@ -1,26 +1,33 @@
 
 # FastAPI
 from fastapi import APIRouter, Body
+from fastapi import status
 
 # Project
-from app.salaries.schemas import Salary, SalaryOut
+from app.salaries.models.salaries import Salary, SalaryOut
+from app.salaries.middlewares.data_validation import salary_by_knowledge
 
 
 router: APIRouter = APIRouter()
 
 
-@router.get(
-    "/api/salaries",
+@router.put(
+    path="/api/salaries",
+    status_code=status.HTTP_200_OK,
     summary="Get salaries information.",
     response_model=SalaryOut,
     tags=["Salaries"]
 )
 def salaries(salary_data: Salary = Body(...)):
     """
-    Salaries
+    # Salaries
     This is the main endpoint of the project.
 
-    :argument salary_data: Salary
-    :return: SalaryOut
+    # Parameters
+    - salary_data: Salary -> Salary Model.
+
+    # Return
+        SalaryOut Model -> Values of average, top and bottom.
     """
-    return SalaryOut(average=4000, top=3000, bottom=5000)
+    data = salary_by_knowledge(dict(salary_data))
+    return SalaryOut(average=data["average"], top=data["top"], bottom=data["bottom"])
