@@ -11,7 +11,7 @@ from app.salaries.middlewares.data_validation import salary_by_knowledge
 router: APIRouter = APIRouter()
 
 
-@router.put(
+@router.post(
     path="/api/salaries",
     status_code=status.HTTP_200_OK,
     summary="Get salaries information.",

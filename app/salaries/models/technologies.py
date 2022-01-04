@@ -7,4 +7,4 @@ from pydantic import BaseModel, Field
 
 
 class Technology(BaseModel):
-    name: str = Field(..., example="python")
+    name: str = Field(..., example="Python")
