@@ -1,21 +1,29 @@
 
 # FastAPI
 from fastapi import APIRouter, Body
+from fastapi import status
 
 # Project
-
+from app.salaries.middlewares.data_validation import all_titles
 
 router: APIRouter = APIRouter()
 
 
 @router.get(
-    "/api/titles",
+    path="/api/titles",
+    status_code=status.HTTP_200_OK,
     summary="Get titles availables.",
-    tags=["Salaries"]
+    tags=["Salaries"],
 )
 def titles():
     """
-    Titles
+    # Titles
     Get titles availables.
+
+    # Parameters
+    - None
+
+    # Return
+        List of all available titles.
     """
-    return [dict(name="backend developer"), dict("frontend developer")]
+    return all_titles()
