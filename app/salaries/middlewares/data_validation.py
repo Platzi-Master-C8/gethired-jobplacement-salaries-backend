@@ -307,7 +307,7 @@ def salary_by_technologies(technology):
     salary_up = []
     tech = []
     for select_tech in technology:
-        tech.append(salary_tech)
+        tech.append(select_tech)
         if tech == []:
             salary_up = 0
             return salary_up
