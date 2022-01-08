@@ -37,7 +37,7 @@ class Salary(BaseModel):
     is_remote: bool = Field(..., example=False)
     location: str = Field(..., example="mx")
     title_id: str = Field(..., example="Fullstack")
-    technologies: List[Technology] = Field(...)
+    technologies: List[str] = Field(...)
 
 
 class SalaryOut(BaseModel):
