@@ -1,10 +1,12 @@
+# Python
+from typing import List
 
 # FastAPI
 from fastapi import APIRouter, Body
 from fastapi import status
 
 # Project
-from app.salaries.middlewares.data_validation import all_titles
+from app.salaries.mockdata.salary_mockdata import all_titles
 
 router: APIRouter = APIRouter()
 
@@ -14,6 +16,7 @@ router: APIRouter = APIRouter()
     status_code=status.HTTP_200_OK,
     summary="Get titles availables.",
     tags=["Salaries"],
+    response_model=List,
 )
 def titles():
     """

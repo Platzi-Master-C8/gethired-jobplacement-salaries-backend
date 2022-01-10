@@ -9,6 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 from app.salaries.routes import salaries_router
 from app.salaries.routes import technologies_router
 from app.salaries.routes import titles_router
+from app.salaries.routes import seniority_router
 
 
 def get_application():
@@ -28,6 +29,7 @@ def get_application():
     app.include_router(salaries_router)
     app.include_router(technologies_router)
     app.include_router(titles_router)
+    app.include_router(seniority_router)
     return app
 
 

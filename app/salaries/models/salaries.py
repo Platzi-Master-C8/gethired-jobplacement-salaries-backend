@@ -3,27 +3,10 @@
 from typing import List
 
 # Pydantic
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
 
 # Project
 from .technologies import Technology
-
-
-A1 = "A1"
-A2 = "A2"
-B1 = "B1"
-B2 = "B2"
-C1 = "C1"
-C2 = "C2"
-
-ENGLISH_LEVEL = (
-    (A1, "A1 Beginner"),
-    (A2, "A2 Elementary"),
-    (B1, "B1 Intermediate"),
-    (B2, "B2 Upper Intermediate"),
-    (C1, "C1 Advance"),
-    (C2, "C2 Upper Advance"),
-)
 
 
 class Salary(BaseModel):
@@ -33,11 +16,11 @@ class Salary(BaseModel):
     """
 
     english_level: str = Field(..., example="B2")
-    seniority: int = Field(..., example="1")
-    is_remote: bool = Field(..., example=False)
+    seniority: str = Field(..., example="Mid")
+    is_remote: bool = Field(..., example=True)
     location: str = Field(..., example="mx")
     title_id: str = Field(..., example="Fullstack")
-    technologies: List[str] = Field(...)
+    technologies: List[Technology] = Field(...)
 
 
 class SalaryOut(BaseModel):
