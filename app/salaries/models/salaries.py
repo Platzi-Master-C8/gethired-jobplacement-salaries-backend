@@ -5,9 +5,6 @@ from typing import List
 # Pydantic
 from pydantic import BaseModel, Field
 
-# Project
-from .technologies import Technology
-
 
 class Salary(BaseModel):
 
@@ -20,7 +17,7 @@ class Salary(BaseModel):
     is_remote: bool = Field(..., example=True)
     location: str = Field(..., example="mx")
     title_id: str = Field(..., example="Fullstack")
-    technologies: List[Technology] = Field(...)
+    technologies: List = Field(..., example=["Python", "C"])
 
 
 class SalaryOut(BaseModel):
