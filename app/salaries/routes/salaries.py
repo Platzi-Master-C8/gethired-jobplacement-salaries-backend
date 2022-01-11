@@ -42,12 +42,10 @@ def salaries(salary_data: Salary = Body(...)):
         raise HTTPException(
             status_code=404, detail=f"English Level {salary_data.english_level} not found")
 
-    for technlogy in salary_data.technologies:
-        individual_tech = dict(technlogy)
-        individual_tech = individual_tech["name"]
-        if not individual_tech in all_technologies():
+    for tech in salary_data.technologies:
+        if not tech in all_technologies():
             raise HTTPException(
-                status_code=404, detail=f"Technology {individual_tech} not found")
+                status_code=404, detail=f"Technology {tech} not found")
 
     data = salary_mokedata()
 
