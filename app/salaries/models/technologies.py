@@ -1,6 +1,6 @@
 
 # Python
-from typing import List
+from typing import Dict, List
 
 # Pydantic
 from pydantic import BaseModel, Field
