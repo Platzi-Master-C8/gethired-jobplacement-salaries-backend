@@ -1,5 +1,5 @@
 
-from app.utils.db import Base
+from config.db import Base
 
 
 (Title, Technology, Salary) = (

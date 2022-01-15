@@ -9,7 +9,7 @@ from sqlalchemy.orm import Query
 from app.salaries.models.salaries import Salary, SalaryOut
 from app.salaries.middlewares.data_validation import salary_by_knowledge
 from app.salaries.schemas import Salary as SalaryModel
-from app.utils.db import SessionLocal
+from config.db import SessionLocal
 
 
 router: APIRouter = APIRouter()
