@@ -11,7 +11,7 @@ from app.salaries.routes import technologies_router
 from app.salaries.routes import titles_router
 from app.salaries.routes import seniority_router
 
-from app.exchanges.router import exchanges_router
+from app.exchanges.routes import exchanges_router
 
 
 def get_application():

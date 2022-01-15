@@ -1,14 +1,13 @@
 # Python
-import random
 from typing import List
 from typing import Optional
 
 # FastAPI
-from fastapi import APIRouter, Body, HTTPException
+from fastapi import APIRouter, HTTPException
 from fastapi import status
 
 # Project
-from app.exchanges.models.exchanges import Currency, Exchange, ExchangeOut
+from app.exchanges.models.exchanges import Currency, ExchangeOut
 from app.exchanges.mockdata.exchenges_mockdata import all_supported_currencies, exchange_to
 
 
@@ -31,7 +30,7 @@ def get_currencies(
     Get all availables currencies.
 
     # Parameters
-    - currency: Code of currency. 
+    - currency: Code of currency.
     - country: Name of country.
 
     # Return
@@ -46,7 +45,7 @@ def get_currencies(
                 return [currency_dict]
 
         raise HTTPException(
-            status_code=404, detail=f"Currency {currency} not found")
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Currency {currency} not found")
 
     if country != None:
         for item in all_supported_currencies():
@@ -56,37 +55,41 @@ def get_currencies(
                 return [country_dict]
 
         raise HTTPException(
-            status_code=404, detail=f"Country {country} not found")
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Country {country} not found")
 
     return all_supported_currencies()
 
 
-@router.post(
+@router.get(
     path="/api/exchange/",
     status_code=status.HTTP_200_OK,
     summary="The dollar equivalent is returned in the selected currency.",
     tags=["Exchange"],
     response_model=ExchangeOut
 )
-def exchange_currency(currency: Exchange = Body(...)):
+def exchange_currency(currency_name: Optional[str] = None, value_to_exchange: Optional[int] = None):
     """
     # Exchange
     The dollar equivalent is returned in the selected currency.
 
     # Parameters
-    - currency: Code of currency. 
+    - currency_name: Code of currency.
+    - value_to_exchange: value to exchange.
 
     # Return
     - Returns the value in the selected currency of the indicated dollars.
     """
 
-    test_dict = dict(exchange_to())
-    # print(test_dict["rates"])
-    for coin in test_dict:
-        if coin == currency.change_to:
-            print(coin)
+    if currency_name == None or value_to_exchange == None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Bad request")
 
-    value_out = {
-        "value": currency.initial_value*round(random.uniform(0.78, 1.29), 2)
-    }
-    return value_out
+    currency_for_change = exchange_to()
+
+    for key, value in currency_for_change["rates"].items():
+        if currency_name == key:
+            total = value*value_to_exchange
+            return {"converted_currency": total}
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Currency {currency_name} not found.")

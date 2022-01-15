@@ -1,5 +1,4 @@
-# Python
-from typing import List
+
 
 # Pydantic
 from pydantic import BaseModel, Field
@@ -14,16 +13,8 @@ class Currency(BaseModel):
     country: str = Field(..., example="Colombia")
 
 
-class Exchange(BaseModel):
-    """
-    Exchange Input
-    """
-    initial_value: int = Field(..., example="200")
-    change_to: str = Field(..., example="COP")
-
-
 class ExchangeOut(BaseModel):
     """
     Exchange Output
     """
-    value: int = Field(..., example="200")
+    converted_currency: int = Field(..., example="2000")
