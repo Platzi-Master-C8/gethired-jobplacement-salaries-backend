@@ -1,15 +1,15 @@
 
 # FastAPI
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, HTTPException
 from fastapi import status
 
 # Project
 from sqlalchemy.orm import Query
 
 from app.salaries.models.salaries import Salary, SalaryOut
-from app.salaries.middlewares.data_validation import salary_by_knowledge
 from app.salaries.schemas import Salary as SalaryModel
 from config.db import SessionLocal
+from app.salaries.mockdata.salary_mockdata import salary_mokedata, all_seniority, all_titles, all_english_levels, all_technologies
 
 
 router: APIRouter = APIRouter()
@@ -33,8 +33,24 @@ def salaries(salary_data: Salary = Body(...)):
     # Return
         SalaryOut Model -> Values of average, top and bottom.
     """
-    data = salary_by_knowledge(dict(salary_data))
-    with SessionLocal() as db:
-        salaries_db = db.query(SalaryModel).all()
-    print(salaries_db)
+
+    if not salary_data.seniority in all_seniority():
+        raise HTTPException(
+            status_code=404, detail=f"Seniority {salary_data.seniority} not found")
+
+    if not salary_data.title_id in all_titles():
+        raise HTTPException(
+            status_code=404, detail=f"Title {salary_data.title_id} not found")
+
+    if not salary_data.english_level in all_english_levels():
+        raise HTTPException(
+            status_code=404, detail=f"English Level {salary_data.english_level} not found")
+
+    for tech in salary_data.technologies:
+        if not tech in all_technologies():
+            raise HTTPException(
+                status_code=404, detail=f"Technology {tech} not found")
+
+    data = salary_mokedata()
+
     return SalaryOut(average=data["average"], top=data["top"], bottom=data["bottom"])
