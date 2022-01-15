@@ -61,7 +61,7 @@ def get_currencies(
 
 
 @router.get(
-    path="/api/exchange/",
+    path="/api/exchange",
     status_code=status.HTTP_200_OK,
     summary="The dollar equivalent is returned in the selected currency.",
     tags=["Exchange"],
