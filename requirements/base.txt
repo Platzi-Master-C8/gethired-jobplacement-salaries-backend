@@ -6,3 +6,4 @@ sqlalchemy==1.4.27
 mypy==0.910
 environ
 psycopg2
+pydantic-sqlalchemy

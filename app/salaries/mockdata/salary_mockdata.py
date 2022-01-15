@@ -33,7 +33,7 @@ titles = [
     "Senior Executive",
     "Scientist",
     "Marketing",
-    "Sales Professional"
+    "Sales Professional",
 ]
 
 
@@ -144,26 +144,13 @@ technologies = [
     "Deno",
     "Chef",
     "Flow",
-    "Pulumi"
+    "Pulumi",
 ]
 
 
-seniority = [
-    'Junior',
-    'Mid-Junior',
-    'Mid',
-    'Mid-Senior',
-    'Senior'
-]
+seniority = ["Junior", "Mid-Junior", "Mid", "Mid-Senior", "Senior"]
 
-english_level = [
-    "A1",
-    "A2",
-    "B1",
-    "B2",
-    "C1",
-    "C2"
-]
+english_level = ["A1", "A2", "B1", "B2", "C1", "C2"]
 
 
 def all_technologies():
@@ -188,11 +175,11 @@ def salary_mokedata():
 
     Calculate the amount of salary you will receive.
     """
-    total_salary = 50000*round(random.uniform(0.18, 1.35), 2)
+    total_salary = 50000 * round(random.uniform(0.18, 1.35), 2)
 
     data = {
-        "bottom": total_salary*round(random.uniform(0.78, 0.92), 2),
+        "bottom": total_salary * round(random.uniform(0.78, 0.92), 2),
         "average": total_salary,
-        "top": total_salary*round(random.uniform(1.16, 1.08), 2),
+        "top": total_salary * round(random.uniform(1.16, 1.08), 2),
     }
     return data

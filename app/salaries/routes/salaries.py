@@ -1,15 +1,19 @@
-
 # FastAPI
 from fastapi import APIRouter, Body, HTTPException
 from fastapi import status
 
 # Project
 from sqlalchemy.orm import Query
+from config import settings
 
 from app.salaries.models.salaries import Salary, SalaryOut
-from app.salaries.schemas import Salary as SalaryModel
-from config.db import SessionLocal
-from app.salaries.mockdata.salary_mockdata import salary_mokedata, all_seniority, all_titles, all_english_levels, all_technologies
+from app.salaries.mockdata.salary_mockdata import (
+    salary_mokedata,
+    all_seniority,
+    all_titles,
+    all_english_levels,
+    all_technologies,
+)
 
 
 router: APIRouter = APIRouter()
@@ -20,7 +24,7 @@ router: APIRouter = APIRouter()
     status_code=status.HTTP_200_OK,
     summary="Get salaries information.",
     response_model=SalaryOut,
-    tags=["Salaries"]
+    tags=["Salaries"],
 )
 def salaries(salary_data: Salary = Body(...)):
     """
@@ -36,21 +40,23 @@ def salaries(salary_data: Salary = Body(...)):
 
     if not salary_data.seniority in all_seniority():
         raise HTTPException(
-            status_code=404, detail=f"Seniority {salary_data.seniority} not found")
+            status_code=404, detail=f"Seniority {salary_data.seniority} not found"
+        )
 
     if not salary_data.title_id in all_titles():
         raise HTTPException(
-            status_code=404, detail=f"Title {salary_data.title_id} not found")
+            status_code=404, detail=f"Title {salary_data.title_id} not found"
+        )
 
     if not salary_data.english_level in all_english_levels():
         raise HTTPException(
-            status_code=404, detail=f"English Level {salary_data.english_level} not found")
+            status_code=404,
+            detail=f"English Level {salary_data.english_level} not found",
+        )
 
     for tech in salary_data.technologies:
         if not tech in all_technologies():
-            raise HTTPException(
-                status_code=404, detail=f"Technology {tech} not found")
+            raise HTTPException(status_code=404, detail=f"Technology {tech} not found")
 
     data = salary_mokedata()
-
     return SalaryOut(average=data["average"], top=data["top"], bottom=data["bottom"])

@@ -1,5 +1,3 @@
-
-
 # Fast API
 from fastapi import FastAPI
 

@@ -7,6 +7,9 @@ from fastapi import status
 
 # Project
 from app.salaries.mockdata.salary_mockdata import all_technologies
+from config import settings
+from config.db import SessionLocal
+from app.salaries.controllers import TechnologyController
 
 
 router: APIRouter = APIRouter()
@@ -30,4 +33,9 @@ def technologies():
     # Return
         List of all available technologies.
     """
+    if not settings.MOCK_DATA:
+        with SessionLocal() as db:
+            controller = TechnologyController(db)
+            technologies_db = controller.filter()
+            return [technology.name for technology in technologies_db]
     return all_technologies()
