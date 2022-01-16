@@ -7,6 +7,7 @@ services:
             dockerfile: ./compose/production/Dockerfile
         volumes:
             - .:/app
+            - static_files:/app/static/
 
     nginx:
         build:
@@ -17,5 +18,10 @@ services:
             - 80:80
         links:
             - app:app
+        volumes:
+            - static_files:/static/
         depends_on:
             - app
+
+volumes:
+    static_files:
