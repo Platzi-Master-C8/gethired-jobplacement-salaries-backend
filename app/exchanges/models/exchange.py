@@ -1,4 +1,5 @@
-
+# Python
+from typing import List
 
 # Pydantic
 from pydantic import BaseModel, Field
@@ -17,4 +18,4 @@ class ExchangeOut(BaseModel):
     """
     Exchange Output
     """
-    converted_currency: int = Field(..., example="2000")
+    converted_currency: List = Field(..., example=[2000, 100, 4000])

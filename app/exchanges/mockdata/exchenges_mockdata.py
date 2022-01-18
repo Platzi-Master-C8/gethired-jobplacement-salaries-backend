@@ -1,17 +1,6 @@
-import random
 
 
 exchange_usd = {
-    "result": "success",
-    "provider": "https://www.exchangerate-api.com",
-    "documentation": "https://www.exchangerate-api.com/docs/free",
-    "terms_of_use": "https://www.exchangerate-api.com/terms",
-    "time_last_update_unix": 1642204951,
-    "time_last_update_utc": "Sat, 15 Jan 2022 00:02:31 +0000",
-    "time_next_update_unix": 1642291581,
-    "time_next_update_utc": "Sun, 16 Jan 2022 00:06:21 +0000",
-    "time_eol_unix": 0,
-    "base_code": "USD",
     "rates": {
         "USD": 1,
         "AED": 3.67,
