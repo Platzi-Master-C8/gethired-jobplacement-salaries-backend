@@ -10,6 +10,7 @@ from app.salaries.routes import salaries_router
 from app.salaries.routes import technologies_router
 from app.salaries.routes import titles_router
 from app.salaries.routes import seniority_router
+from app.salaries.routes import english_levels_router
 
 from app.exchanges.routes import exchanges_router
 from app.exchanges.routes import currencies_router
@@ -33,6 +34,7 @@ def get_application():
     app.include_router(technologies_router)
     app.include_router(titles_router)
     app.include_router(seniority_router)
+    app.include_router(english_levels_router)
 
     app.include_router(exchanges_router)
     app.include_router(currencies_router)
