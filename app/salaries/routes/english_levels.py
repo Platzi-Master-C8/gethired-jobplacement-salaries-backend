@@ -12,7 +12,7 @@ router: APIRouter = APIRouter()
 
 
 @router.get(
-    path="/api/english-levels",
+    path="/api/english",
     status_code=status.HTTP_200_OK,
     summary="Get english levels.",
     tags=["Salaries"],
