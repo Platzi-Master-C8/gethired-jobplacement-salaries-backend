@@ -30,7 +30,12 @@ def salaries(salary_data: Salary = Body(...)):
         SalaryOut Model -> Values of average, top and bottom.
     """
 
-    if not salary_data.seniority in all_seniority():
+    english_level = []
+    seniorities = []
+    for name_seniority in all_seniority()["texts"]:
+        seniorities.append(name_seniority["level"])
+
+    if not salary_data.seniority in seniorities:
         raise HTTPException(
             status_code=404, detail=f"Seniority {salary_data.seniority} not found")
 
@@ -38,7 +43,10 @@ def salaries(salary_data: Salary = Body(...)):
         raise HTTPException(
             status_code=404, detail=f"Title {salary_data.title_id} not found")
 
-    if not salary_data.english_level in all_english_levels():
+    for name_level_english in all_english_levels()["texts"]:
+        english_level.append(name_level_english["level"])
+
+    if not salary_data.english_level in english_level:
         raise HTTPException(
             status_code=404, detail=f"English Level {salary_data.english_level} not found")
 
