@@ -15,7 +15,7 @@ class Salary(BaseModel):
     seniority: str = Field(..., example="Mid")
     is_remote: bool = Field(..., example=True)
     location: str = Field(..., example="mx")
-    title_id: str = Field(..., example="Fullstack")
+    title_name: str = Field(..., example="Fullstack")
     technologies: List = Field(..., example=["Python", "C"])
 
 
