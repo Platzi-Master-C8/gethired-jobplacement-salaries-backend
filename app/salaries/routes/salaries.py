@@ -42,11 +42,6 @@ def salaries(salary_data: Salary = Body(...)):
 
     if not settings.MOCK_DATA:
         with SessionLocal() as db:
-            if salary_data.seniority not in all_seniority():
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Seniority {salary_data.seniority} not found"
-                )
             if not TitleController(db).filter(name=salary_data.title_name).first():
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,

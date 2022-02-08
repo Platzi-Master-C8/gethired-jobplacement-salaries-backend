@@ -12,7 +12,7 @@ class Salary(BaseModel):
     """
 
     english_level: str = Field(..., example="B2")
-    seniority: str = Field(..., example="Mid")
+    seniority: int = Field(..., example="1")
     is_remote: bool = Field(..., example=True)
     location: str = Field(..., example="mx")
     title_name: str = Field(..., example="Fullstack")

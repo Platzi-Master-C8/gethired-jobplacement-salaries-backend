@@ -23,26 +23,62 @@ class SalaryController(BaseController):
         return query
 
     def filter_by_english_level(self, query, english_level):
-        query = query.filter_by(english_levely=english_level)
+        query = query.filter_by(english_level=english_level)
+        return query
+
+    def filter_by_remote(self, query, is_remote: bool):
+        query = query.filter_by(is_remote=is_remote)
+        return query
+
+    def filter_by_location(self, query, location: str):
+        query = query.filter_by(location=location)
         return query
 
     def _get_not_none_query(self, deprioritised_query, prioritised_query):
-        pass
+        if prioritised_query.count():
+            return prioritised_query
+        return deprioritised_query
 
-    def _get_most_alike_salary(self, title_name: str, seniority: int, english_level: int):
-        layer = list()
+    def _get_salary_by_layers(
+            self, title_name: str, seniority: int, english_level: str,
+            is_remote: bool, location: str,
+    ):
+        layers = list()
         salaries_by_title = self.filter_by_title(self.base_query, title_name)
         salaries_by_seniority = self.filter_by_seniority(salaries_by_title, seniority)
-        first_layer_query = self._get_not_none_query(salaries_by_title, salaries_by_seniority)
-        return temporal_query
+        first_layer = self._get_not_none_query(salaries_by_title, salaries_by_seniority)
+        layers.append(first_layer)
+        salaries_by_english_level = self.filter_by_english_level(first_layer, english_level)
+        second_layer = self._get_not_none_query(first_layer, salaries_by_english_level)
+        layers.append(second_layer)
+        salaries_by_remote = self.filter_by_remote(second_layer, is_remote)
+        third_layer = self._get_not_none_query(second_layer, salaries_by_remote)
+        layers.append(third_layer)
+        if not is_remote and location:
+            salaries_by_location = self.filter_by_location(third_layer, location)
+            layers.append(self._get_not_none_query(third_layer, salaries_by_location))
+        return layers
+
+    def _get_upper_layer(self, layers):
+        layer = layers[0]
+        for query in layers:
+            if query.count():
+                layer = query
+        return layer
+
+    def _get_most_alike_salary(
+            self, title_name: str, seniority: int, english_level: str,
+            is_remote: bool, location: str,
+    ):
+        layers = self._get_salary_by_layers(title_name, seniority, english_level, is_remote, location)
+        salaries = self._get_upper_layer(layers)
+        return salaries.first()
 
     def calculate_salary(self, salary_data: SalaryModel) -> SalaryOut:
-        last_salaries = self.filter_by_title(self.base_query, salary_data.title_name)
-        new_salaries = self.filter_by_seniority(last_salaries, salary_data.seniority)
-        salaries = self._compare_querysets(last_salaries, new_salaries)
-        last_salaries = self.filter_by_english_level(salaries, salary_data.english_level)
-        self._compare_querysets(salaries, last_salaries)
-        salary = salaries.first()
+        salary = self._get_most_alike_salary(
+            salary_data.title_name, salary_data.seniority, salary_data.english_level,
+            salary_data.is_remote, salary_data.location
+        )
         if salary:
             return SalaryOut(bottom=salary.bottom, average=salary.average, top=salary.top)
         return SalaryOut(bottom=0, top=0, average=0)
