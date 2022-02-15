@@ -6,6 +6,7 @@ from fastapi import APIRouter, Body
 from fastapi import status
 
 # Project
+from app.salaries.models.salaries import SeniorityOut
 from app.salaries.mockdata.salary_mockdata import all_seniority
 
 router: APIRouter = APIRouter()
@@ -16,7 +17,7 @@ router: APIRouter = APIRouter()
     status_code=status.HTTP_200_OK,
     summary="Get levels availables.",
     tags=["Salaries"],
-    response_model=List,
+    response_model=SeniorityOut,
 )
 def titles():
     """
