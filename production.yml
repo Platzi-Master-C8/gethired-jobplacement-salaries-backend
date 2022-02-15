@@ -5,6 +5,8 @@ services:
         build:
             context: .
             dockerfile: ./compose/production/Dockerfile
+        env_file:
+            - .env
         volumes:
             - .:/app
             - static_files:/app/static/
@@ -25,5 +27,20 @@ services:
         depends_on:
             - app
 
+    db:
+        image: postgres:14
+        restart: always
+        ports:
+            - "5432:5432"
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        env_file:
+            - .env
+        volumes:
+            - ./db:/docker-entrypoint-initdb.d
+            - pg_data:/var/lib/postgresql/data
+
 volumes:
     static_files:
+    pg_data:
