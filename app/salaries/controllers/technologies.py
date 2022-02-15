@@ -1,5 +1,5 @@
 from app.utils.controllers import BaseController
-from app.salaries.schemas import Technology
+from app.salaries.models import Technology
 
 
 class TechnologyController(BaseController):

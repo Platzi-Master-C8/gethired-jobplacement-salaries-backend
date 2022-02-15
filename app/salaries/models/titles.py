@@ -1,7 +1,6 @@
-
 from config.db import Base
 
 
-class Salary(Base.classes.salaries):
+class Title(Base.classes.titles):
 
     pass

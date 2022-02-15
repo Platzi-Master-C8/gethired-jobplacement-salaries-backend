@@ -1,12 +1,16 @@
 
+from typing import List
+
+from sqlalchemy.orm import Query
+
 from app.utils.controllers import BaseController
-from app.salaries.schemas import Salary as SalarySchema, Title
-from app.salaries.models import Salary as SalaryModel, SalaryOut
+from app.salaries.models import Salary as Salary, Title
+from app.salaries.schemas import Salary as SalarySchema, SalaryOut
 
 
 class SalaryController(BaseController):
 
-    model_class = SalarySchema
+    model_class = Salary
 
     def _compare_querysets(self, old_queryset, new_queryset):
         if not len(new_queryset) and len(old_queryset):
@@ -66,18 +70,28 @@ class SalaryController(BaseController):
                 layer = query
         return layer
 
+    def _filter_salaries_by_technologies(self, salaries: Query, technologies: List[str]) -> Salary:
+        best_salary = (None, 0)
+        for salary in salaries:
+            salary_technologies = [technology for technology in salary.technologies_collection if technology.name in technologies]
+            number_of_technologies = len(salary_technologies)
+            if number_of_technologies >= best_salary[1]:
+                best_salary = (salary, number_of_technologies)
+        return best_salary[0] or salaries.first()
+
     def _get_most_alike_salary(
             self, title_name: str, seniority: int, english_level: str,
-            is_remote: bool, location: str,
-    ):
+            is_remote: bool, location: str, technologies: List[str]
+    ) -> Salary:
         layers = self._get_salary_by_layers(title_name, seniority, english_level, is_remote, location)
         salaries = self._get_upper_layer(layers)
-        return salaries.first()
+        salary = self._filter_salaries_by_technologies(salaries, technologies)
+        return salary
 
-    def calculate_salary(self, salary_data: SalaryModel) -> SalaryOut:
+    def calculate_salary(self, salary_data: SalarySchema) -> SalaryOut:
         salary = self._get_most_alike_salary(
             salary_data.title_name, salary_data.seniority, salary_data.english_level,
-            salary_data.is_remote, salary_data.location
+            salary_data.is_remote, salary_data.location, salary_data.technologies
         )
         if salary:
             return SalaryOut(bottom=salary.bottom, average=salary.average, top=salary.top)

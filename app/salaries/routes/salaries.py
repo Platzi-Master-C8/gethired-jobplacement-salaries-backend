@@ -7,8 +7,8 @@ from starlette import status
 from sqlalchemy.orm import Query
 from config import settings
 from config.db import SessionLocal
-from app.salaries.controllers import SalaryController, TitleController
-from app.salaries.models.salaries import Salary, SalaryOut
+from app.salaries.controllers import SalaryController, TitleController, TechnologyController
+from app.salaries.schemas.salaries import Salary, SalaryOut
 from app.salaries.mockdata.salary_mockdata import (
     salary_mokedata,
     all_seniority,
@@ -46,6 +46,29 @@ def salaries(salary_data: Salary = Body(...)):
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"Title {salary_data.title_name} not found"
+                )
+            for technology in salary_data.technologies:
+                if not TechnologyController(db).base_query.filter(
+                    TechnologyController.model_class.name == technology
+                ).count():
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Technology {technology} not found."
+                    )
+            if salary_data.english_level not in ["A1", "A2", "B1", "B2", "C1", "C2"]:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"{salary_data.english_level} is not an english level."
+                )
+            if salary_data.seniority not in [1, 2, 3, 4]:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"{salary_data.seniority} not found."
+                )
+            if not salary_data.is_remote and not salary_data.location:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"You've got to specify a location."
                 )
             return SalaryController(db).calculate_salary(salary_data)
 

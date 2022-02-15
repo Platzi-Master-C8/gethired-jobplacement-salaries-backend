@@ -1,5 +1,5 @@
 from app.utils.controllers import BaseController
-from app.salaries.schemas import Title
+from app.salaries.models import Title
 
 
 class TitleController(BaseController):
